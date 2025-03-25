@@ -34,4 +34,4 @@ jobs:
         git commit -m "Sync files from admin portal"
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets.Admin_token }}
+        GITHUB_TOKEN: ${{ secrets.ADMIN_TOKEN }}
