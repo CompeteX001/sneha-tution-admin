@@ -45,7 +45,6 @@ document.getElementById('boardSelect').addEventListener('change', loadSubjects);
 
 function loadSubjects() {
     const classValue = document.getElementById('classSelect').value;
-
     const subjects = {
         nursery: ["Mathematics", "English", "Environmental Studies"],
         1: ["Mathematics", "English", "Environmental Studies"],
@@ -112,7 +111,7 @@ function loadUploadedFiles() {
 }
 
 function deleteFile(filePath, fileSHA) {
-    fetch(`/delete`, {
+    fetch('/delete', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
