@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Upload Portal</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Upload Portal</h1>
+    </header>
+    <main>
+        <section class="upload-section">
+            <h2>Upload Notes</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <label for="classSelect">Class:</label>
+                <select id="classSelect" name="class">
+                    <option value="nursery">Nursery</option>
+                    <option value="1">Class 1</option>
+                    <option value="2">Class 2</option>
+                    <option value="3">Class 3</option>
+                    <option value="4">Class 4</option>
+                    <option value="5">Class 5</option>
+                    <option value="6">Class 6</option>
+                    <option value="7">Class 7</option>
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
+                </select>
+                <label for="boardSelect">Board:</label>
+                <select id="boardSelect" name="board">
+                    <option value="icse">ICSE</option>
+                    <option value="cbse">CBSE</option>
+                </select>
+                <label for="subjectSelect">Subject:</label>
+                <select id="subjectSelect" name="subject">
+                    <!-- Subjects will be dynamically loaded based on the class and board selection -->
+                </select>
+                <label for="fileInput">Upload PDF:</label>
+                <input type="file" id="fileInput" name="file" accept="application/pdf" required>
+                <button type="submit">Upload</button>
+            </form>
+        </section>
+    </main>
+    <script src="admin.js"></script>
+</body>
+</html>
