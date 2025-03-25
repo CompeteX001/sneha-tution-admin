@@ -9,26 +9,26 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
     const reader = new FileReader();
     reader.onloadend = function() {
         const base64File = reader.result.split(',')[1];
-        const token = process.env.GITHUB_TOKEN; // Use environment variable for token
 
-        fetch(`https://api.github.com/repos/CompeteX001/sneha-tution-admin/contents/uploads/${classValue}/${boardValue}/${subjectValue}/${fileInput.name}`, {
-            method: 'PUT',
+        fetch('/upload', {
+            method: 'POST',
             headers: {
-                'Authorization': `token ${token}`, // Securely use the token
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: `Upload ${fileInput.name}`,
-                content: base64File,
-                branch: 'main'
+                classValue,
+                boardValue,
+                subjectValue,
+                fileName: fileInput.name,
+                fileContent: base64File
             })
         })
         .then(response => response.json())
         .then(data => {
-            if (data.commit) {
-                alert('File uploaded successfully!');
+            if (data.message === 'File uploaded successfully!') {
+                alert(data.message);
             } else {
-                alert('File upload failed. Please try again.');
+                alert(data.message);
             }
         })
         .catch(error => {
