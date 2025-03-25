@@ -31,6 +31,7 @@ app.post('/upload', async (req, res) => {
         if (data.commit) {
             res.status(200).json({ message: 'File uploaded successfully!' });
         } else {
+            console.error('Error uploading file:', data);
             res.status(500).json({ message: 'File upload failed. Please try again.' });
         }
     } catch (error) {
@@ -79,6 +80,7 @@ app.post('/delete', async (req, res) => {
         if (response.ok) {
             res.status(200).json({ message: 'File deleted successfully!' });
         } else {
+            console.error('Error deleting file:', await response.json());
             res.status(500).json({ message: 'Failed to delete file. Please try again.' });
         }
     } catch (error) {
