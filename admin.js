@@ -27,6 +27,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
         .then(data => {
             if (data.message === 'File uploaded successfully!') {
                 alert(data.message);
+                loadUploadedFiles();
             } else {
                 alert(data.message);
             }
@@ -39,16 +40,11 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
     reader.readAsDataURL(fileInput);
 });
 
-document.getElementById('classSelect').addEventListener('change', function() {
-    loadSubjects();
-});
-document.getElementById('boardSelect').addEventListener('change', function() {
-    loadSubjects();
-});
+document.getElementById('classSelect').addEventListener('change', loadSubjects);
+document.getElementById('boardSelect').addEventListener('change', loadSubjects);
 
 function loadSubjects() {
     const classValue = document.getElementById('classSelect').value;
-    const boardValue = document.getElementById('boardSelect').value;
 
     const subjects = {
         nursery: ["Mathematics", "English", "Environmental Studies"],
@@ -69,7 +65,7 @@ function loadSubjects() {
     const subjectSelect = document.getElementById('subjectSelect');
     subjectSelect.innerHTML = '';
 
-    if(subjects[classValue]) {
+    if (subjects[classValue]) {
         subjects[classValue].forEach(subject => {
             const option = document.createElement('option');
             option.value = subject.toLowerCase();
@@ -78,3 +74,68 @@ function loadSubjects() {
         });
     }
 }
+
+function loadUploadedFiles() {
+    const fileList = document.getElementById('fileList');
+    fileList.innerHTML = '';
+
+    fetch('/list-uploads')
+        .then(response => response.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                data.forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.classList.add('file-item');
+
+                    const fileLink = document.createElement('a');
+                    fileLink.href = file.download_url;
+                    fileLink.textContent = file.name;
+                    fileItem.appendChild(fileLink);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', function() {
+                        deleteFile(file.path, file.sha);
+                    });
+                    fileItem.appendChild(deleteButton);
+
+                    fileList.appendChild(fileItem);
+                });
+            } else {
+                fileList.textContent = 'No files uploaded yet.';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching file list:', error);
+            fileList.textContent = 'Error fetching file list. Please try again later.';
+        });
+}
+
+function deleteFile(filePath, fileSHA) {
+    fetch(`/delete`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            filePath,
+            fileSHA
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'File deleted successfully!') {
+            alert(data.message);
+            loadUploadedFiles();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete file. Please try again.');
+    });
+}
+
+// Load the list of uploaded files on page load
+document.addEventListener('DOMContentLoaded', loadUploadedFiles);
